@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use_from_same_package
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'sub_state.freezed.dart';
@@ -22,8 +23,8 @@ abstract class SubState<TSuccess> with _$SubState<TSuccess> {
   String? get errorOrNull => whenOrNull(failure: (err) => err);
 }
 
-abstract class CubitSubState<T> extends Cubit<SubState<T>> {
-  CubitSubState() : super(SubState<T>.initial());
+abstract class SubStateCubit<T> extends Cubit<SubState<T>> {
+  SubStateCubit() : super(SubState<T>.initial());
 
   @Deprecated('Use new emit methods instead like emitSuccess or emitFailure')
   @protected
@@ -47,4 +48,72 @@ abstract class CubitSubState<T> extends Cubit<SubState<T>> {
   @protected
   @visibleForTesting
   void emitLoading() => emit(SubState<T>.loading());
+}
+
+class SubStateProviderBuilder<T extends Cubit<SubState<S>>, S>
+    extends StatelessWidget {
+  final T Function(BuildContext context) create;
+  final Widget Function(BuildContext context, SubState<S> state) builder;
+  final bool Function(SubState<S> previous, SubState<S> current)? buildWhen;
+  final bool Function(SubState<S> previous, SubState<S> current)? listenWhen;
+  final void Function(BuildContext context, SubState<S> state)? listener;
+
+  const SubStateProviderBuilder({
+    super.key,
+    required this.create,
+    required this.builder,
+    this.buildWhen,
+    this.listenWhen,
+    this.listener,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: create,
+      child: listener == null
+          ? BlocBuilder<T, SubState<S>>(
+              buildWhen: buildWhen,
+              builder: builder,
+            )
+          : BlocConsumer<T, SubState<S>>(
+              listenWhen: listenWhen,
+              listener: listener!,
+              buildWhen: buildWhen,
+              builder: builder,
+            ),
+    );
+  }
+}
+
+class SubStateBuilder<T extends Cubit<SubState<S>>, S> extends StatelessWidget {
+  final T Function(BuildContext context) create;
+  final Widget Function(BuildContext context, SubState<S> state) builder;
+  final bool Function(SubState<S> previous, SubState<S> current)? buildWhen;
+  final bool Function(SubState<S> previous, SubState<S> current)? listenWhen;
+  final void Function(BuildContext context, SubState<S> state)? listener;
+
+  const SubStateBuilder({
+    super.key,
+    required this.builder,
+    this.buildWhen,
+    this.listenWhen,
+    this.listener,
+    required this.create,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return listener == null
+        ? BlocBuilder<T, SubState<S>>(
+            buildWhen: buildWhen,
+            builder: builder,
+          )
+        : BlocConsumer<T, SubState<S>>(
+            listenWhen: listenWhen,
+            listener: listener!,
+            buildWhen: buildWhen,
+            builder: builder,
+          );
+  }
 }
