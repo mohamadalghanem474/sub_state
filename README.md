@@ -1,7 +1,7 @@
 # 🧩 Sub State
 
 A lightweight, type-safe state management utility for Dart and Flutter applications.  
-Built with `freezed` for seamless state handling using union types.
+ Choose the right number of parameters for your use case like SubState<T> or SubState2<T, E>.
 
 ---
 
