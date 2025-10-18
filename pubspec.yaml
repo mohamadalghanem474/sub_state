@@ -1,6 +1,6 @@
 name: sub_state
-description: A lightweight state management helper built on top of bloc and freezed.
-version: 1.0.3
+description: A lightweight state management helper.
+version: 1.0.4
 homepage: https://github.com/mohamadalghanem474/sub_state
 repository: https://github.com/mohamadalghanem474/sub_state
 issue_tracker: https://github.com/mohamadalghanem474/sub_state/issues
