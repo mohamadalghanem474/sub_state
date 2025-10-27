@@ -16,8 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$SubState<TSuccess> {
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is SubState<TSuccess>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is SubState<TSuccess>);
   }
 
   @override
@@ -157,7 +156,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(TSuccess data)? success,
-    TResult Function(String error)? failure,
+    TResult Function(String error, bool show)? failure,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -169,7 +168,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
       case _SubSuccess() when success != null:
         return success(_that.data);
       case _SubFailure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return orElse();
     }
@@ -193,7 +192,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(TSuccess data) success,
-    required TResult Function(String error) failure,
+    required TResult Function(String error, bool show) failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -204,7 +203,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
       case _SubSuccess():
         return success(_that.data);
       case _SubFailure():
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -227,7 +226,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(TSuccess data)? success,
-    TResult? Function(String error)? failure,
+    TResult? Function(String error, bool show)? failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -238,7 +237,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
       case _SubSuccess() when success != null:
         return success(_that.data);
       case _SubFailure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return null;
     }
@@ -252,8 +251,7 @@ class _SubInitial<TSuccess> extends SubState<TSuccess> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _SubInitial<TSuccess>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _SubInitial<TSuccess>);
   }
 
   @override
@@ -272,8 +270,7 @@ class _SubLoading<TSuccess> extends SubState<TSuccess> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _SubLoading<TSuccess>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _SubLoading<TSuccess>);
   }
 
   @override
@@ -296,21 +293,15 @@ class _SubSuccess<TSuccess> extends SubState<TSuccess> {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$SubSuccessCopyWith<TSuccess, _SubSuccess<TSuccess>> get copyWith =>
-      __$SubSuccessCopyWithImpl<TSuccess, _SubSuccess<TSuccess>>(
-          this, _$identity);
+  _$SubSuccessCopyWith<TSuccess, _SubSuccess<TSuccess>> get copyWith => __$SubSuccessCopyWithImpl<TSuccess, _SubSuccess<TSuccess>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _SubSuccess<TSuccess> &&
-            const DeepCollectionEquality().equals(other.data, data));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _SubSuccess<TSuccess> && const DeepCollectionEquality().equals(other.data, data));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(data));
+  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(data));
 
   @override
   String toString() {
@@ -319,17 +310,14 @@ class _SubSuccess<TSuccess> extends SubState<TSuccess> {
 }
 
 /// @nodoc
-abstract mixin class _$SubSuccessCopyWith<TSuccess, $Res>
-    implements $SubStateCopyWith<TSuccess, $Res> {
-  factory _$SubSuccessCopyWith(_SubSuccess<TSuccess> value,
-      $Res Function(_SubSuccess<TSuccess>) _then) = __$SubSuccessCopyWithImpl;
+abstract mixin class _$SubSuccessCopyWith<TSuccess, $Res> implements $SubStateCopyWith<TSuccess, $Res> {
+  factory _$SubSuccessCopyWith(_SubSuccess<TSuccess> value, $Res Function(_SubSuccess<TSuccess>) _then) = __$SubSuccessCopyWithImpl;
   @useResult
   $Res call({TSuccess data});
 }
 
 /// @nodoc
-class __$SubSuccessCopyWithImpl<TSuccess, $Res>
-    implements _$SubSuccessCopyWith<TSuccess, $Res> {
+class __$SubSuccessCopyWithImpl<TSuccess, $Res> implements _$SubSuccessCopyWith<TSuccess, $Res> {
   __$SubSuccessCopyWithImpl(this._self, this._then);
 
   final _SubSuccess<TSuccess> _self;
@@ -353,47 +341,41 @@ class __$SubSuccessCopyWithImpl<TSuccess, $Res>
 /// @nodoc
 
 class _SubFailure<TSuccess> extends SubState<TSuccess> {
-  const _SubFailure(this.error) : super._();
+  const _SubFailure(this.error, {this.show = true}) : super._();
 
   final String error;
+  @JsonKey()
+  final bool show;
 
   /// Create a copy of SubState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$SubFailureCopyWith<TSuccess, _SubFailure<TSuccess>> get copyWith =>
-      __$SubFailureCopyWithImpl<TSuccess, _SubFailure<TSuccess>>(
-          this, _$identity);
+  _$SubFailureCopyWith<TSuccess, _SubFailure<TSuccess>> get copyWith => __$SubFailureCopyWithImpl<TSuccess, _SubFailure<TSuccess>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _SubFailure<TSuccess> &&
-            (identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _SubFailure<TSuccess> && (identical(other.error, error) || other.error == error) && (identical(other.show, show) || other.show == show));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, error);
+  int get hashCode => Object.hash(runtimeType, error, show);
 
   @override
   String toString() {
-    return 'SubState<$TSuccess>.failure(error: $error)';
+    return 'SubState<$TSuccess>.failure(error: $error, show: $show)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$SubFailureCopyWith<TSuccess, $Res>
-    implements $SubStateCopyWith<TSuccess, $Res> {
-  factory _$SubFailureCopyWith(_SubFailure<TSuccess> value,
-      $Res Function(_SubFailure<TSuccess>) _then) = __$SubFailureCopyWithImpl;
+abstract mixin class _$SubFailureCopyWith<TSuccess, $Res> implements $SubStateCopyWith<TSuccess, $Res> {
+  factory _$SubFailureCopyWith(_SubFailure<TSuccess> value, $Res Function(_SubFailure<TSuccess>) _then) = __$SubFailureCopyWithImpl;
   @useResult
-  $Res call({String error});
+  $Res call({String error, bool show});
 }
 
 /// @nodoc
-class __$SubFailureCopyWithImpl<TSuccess, $Res>
-    implements _$SubFailureCopyWith<TSuccess, $Res> {
+class __$SubFailureCopyWithImpl<TSuccess, $Res> implements _$SubFailureCopyWith<TSuccess, $Res> {
   __$SubFailureCopyWithImpl(this._self, this._then);
 
   final _SubFailure<TSuccess> _self;
@@ -404,12 +386,17 @@ class __$SubFailureCopyWithImpl<TSuccess, $Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? error = null,
+    Object? show = null,
   }) {
     return _then(_SubFailure<TSuccess>(
       null == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      show: null == show
+          ? _self.show
+          : show // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -418,8 +405,7 @@ class __$SubFailureCopyWithImpl<TSuccess, $Res>
 mixin _$SubState2<T1, T2> {
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is SubState2<T1, T2>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is SubState2<T1, T2>);
   }
 
   @override
@@ -559,7 +545,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(T1 data1, T2 data2)? success,
-    TResult Function(String error)? failure,
+    TResult Function(String error, bool show)? failure,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -571,7 +557,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
       case _Sub2Success() when success != null:
         return success(_that.data1, _that.data2);
       case _Sub2Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return orElse();
     }
@@ -595,7 +581,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(T1 data1, T2 data2) success,
-    required TResult Function(String error) failure,
+    required TResult Function(String error, bool show) failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -606,7 +592,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
       case _Sub2Success():
         return success(_that.data1, _that.data2);
       case _Sub2Failure():
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -629,7 +615,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(T1 data1, T2 data2)? success,
-    TResult? Function(String error)? failure,
+    TResult? Function(String error, bool show)? failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -640,7 +626,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
       case _Sub2Success() when success != null:
         return success(_that.data1, _that.data2);
       case _Sub2Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return null;
     }
@@ -654,8 +640,7 @@ class _Sub2Initial<T1, T2> extends SubState2<T1, T2> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Sub2Initial<T1, T2>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub2Initial<T1, T2>);
   }
 
   @override
@@ -674,8 +659,7 @@ class _Sub2Loading<T1, T2> extends SubState2<T1, T2> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Sub2Loading<T1, T2>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub2Loading<T1, T2>);
   }
 
   @override
@@ -699,24 +683,15 @@ class _Sub2Success<T1, T2> extends SubState2<T1, T2> {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub2SuccessCopyWith<T1, T2, _Sub2Success<T1, T2>> get copyWith =>
-      __$Sub2SuccessCopyWithImpl<T1, T2, _Sub2Success<T1, T2>>(
-          this, _$identity);
+  _$Sub2SuccessCopyWith<T1, T2, _Sub2Success<T1, T2>> get copyWith => __$Sub2SuccessCopyWithImpl<T1, T2, _Sub2Success<T1, T2>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub2Success<T1, T2> &&
-            const DeepCollectionEquality().equals(other.data1, data1) &&
-            const DeepCollectionEquality().equals(other.data2, data2));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub2Success<T1, T2> && const DeepCollectionEquality().equals(other.data1, data1) && const DeepCollectionEquality().equals(other.data2, data2));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(data1),
-      const DeepCollectionEquality().hash(data2));
+  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(data1), const DeepCollectionEquality().hash(data2));
 
   @override
   String toString() {
@@ -725,17 +700,14 @@ class _Sub2Success<T1, T2> extends SubState2<T1, T2> {
 }
 
 /// @nodoc
-abstract mixin class _$Sub2SuccessCopyWith<T1, T2, $Res>
-    implements $SubState2CopyWith<T1, T2, $Res> {
-  factory _$Sub2SuccessCopyWith(_Sub2Success<T1, T2> value,
-      $Res Function(_Sub2Success<T1, T2>) _then) = __$Sub2SuccessCopyWithImpl;
+abstract mixin class _$Sub2SuccessCopyWith<T1, T2, $Res> implements $SubState2CopyWith<T1, T2, $Res> {
+  factory _$Sub2SuccessCopyWith(_Sub2Success<T1, T2> value, $Res Function(_Sub2Success<T1, T2>) _then) = __$Sub2SuccessCopyWithImpl;
   @useResult
   $Res call({T1 data1, T2 data2});
 }
 
 /// @nodoc
-class __$Sub2SuccessCopyWithImpl<T1, T2, $Res>
-    implements _$Sub2SuccessCopyWith<T1, T2, $Res> {
+class __$Sub2SuccessCopyWithImpl<T1, T2, $Res> implements _$Sub2SuccessCopyWith<T1, T2, $Res> {
   __$Sub2SuccessCopyWithImpl(this._self, this._then);
 
   final _Sub2Success<T1, T2> _self;
@@ -764,47 +736,41 @@ class __$Sub2SuccessCopyWithImpl<T1, T2, $Res>
 /// @nodoc
 
 class _Sub2Failure<T1, T2> extends SubState2<T1, T2> {
-  const _Sub2Failure(this.error) : super._();
+  const _Sub2Failure(this.error, {this.show = true}) : super._();
 
   final String error;
+  @JsonKey()
+  final bool show;
 
   /// Create a copy of SubState2
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub2FailureCopyWith<T1, T2, _Sub2Failure<T1, T2>> get copyWith =>
-      __$Sub2FailureCopyWithImpl<T1, T2, _Sub2Failure<T1, T2>>(
-          this, _$identity);
+  _$Sub2FailureCopyWith<T1, T2, _Sub2Failure<T1, T2>> get copyWith => __$Sub2FailureCopyWithImpl<T1, T2, _Sub2Failure<T1, T2>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub2Failure<T1, T2> &&
-            (identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub2Failure<T1, T2> && (identical(other.error, error) || other.error == error) && (identical(other.show, show) || other.show == show));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, error);
+  int get hashCode => Object.hash(runtimeType, error, show);
 
   @override
   String toString() {
-    return 'SubState2<$T1, $T2>.failure(error: $error)';
+    return 'SubState2<$T1, $T2>.failure(error: $error, show: $show)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$Sub2FailureCopyWith<T1, T2, $Res>
-    implements $SubState2CopyWith<T1, T2, $Res> {
-  factory _$Sub2FailureCopyWith(_Sub2Failure<T1, T2> value,
-      $Res Function(_Sub2Failure<T1, T2>) _then) = __$Sub2FailureCopyWithImpl;
+abstract mixin class _$Sub2FailureCopyWith<T1, T2, $Res> implements $SubState2CopyWith<T1, T2, $Res> {
+  factory _$Sub2FailureCopyWith(_Sub2Failure<T1, T2> value, $Res Function(_Sub2Failure<T1, T2>) _then) = __$Sub2FailureCopyWithImpl;
   @useResult
-  $Res call({String error});
+  $Res call({String error, bool show});
 }
 
 /// @nodoc
-class __$Sub2FailureCopyWithImpl<T1, T2, $Res>
-    implements _$Sub2FailureCopyWith<T1, T2, $Res> {
+class __$Sub2FailureCopyWithImpl<T1, T2, $Res> implements _$Sub2FailureCopyWith<T1, T2, $Res> {
   __$Sub2FailureCopyWithImpl(this._self, this._then);
 
   final _Sub2Failure<T1, T2> _self;
@@ -815,12 +781,17 @@ class __$Sub2FailureCopyWithImpl<T1, T2, $Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? error = null,
+    Object? show = null,
   }) {
     return _then(_Sub2Failure<T1, T2>(
       null == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      show: null == show
+          ? _self.show
+          : show // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -829,8 +800,7 @@ class __$Sub2FailureCopyWithImpl<T1, T2, $Res>
 mixin _$SubState3<T1, T2, T3> {
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is SubState3<T1, T2, T3>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is SubState3<T1, T2, T3>);
   }
 
   @override
@@ -844,8 +814,7 @@ mixin _$SubState3<T1, T2, T3> {
 
 /// @nodoc
 class $SubState3CopyWith<T1, T2, T3, $Res> {
-  $SubState3CopyWith(
-      SubState3<T1, T2, T3> _, $Res Function(SubState3<T1, T2, T3>) __);
+  $SubState3CopyWith(SubState3<T1, T2, T3> _, $Res Function(SubState3<T1, T2, T3>) __);
 }
 
 /// Adds pattern-matching-related methods to [SubState3].
@@ -971,7 +940,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(T1 data1, T2 data2, T3 data3)? success,
-    TResult Function(String error)? failure,
+    TResult Function(String error, bool show)? failure,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -983,7 +952,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
       case _Sub3Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3);
       case _Sub3Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return orElse();
     }
@@ -1007,7 +976,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(T1 data1, T2 data2, T3 data3) success,
-    required TResult Function(String error) failure,
+    required TResult Function(String error, bool show) failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -1018,7 +987,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
       case _Sub3Success():
         return success(_that.data1, _that.data2, _that.data3);
       case _Sub3Failure():
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -1041,7 +1010,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(T1 data1, T2 data2, T3 data3)? success,
-    TResult? Function(String error)? failure,
+    TResult? Function(String error, bool show)? failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -1052,7 +1021,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
       case _Sub3Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3);
       case _Sub3Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return null;
     }
@@ -1066,8 +1035,7 @@ class _Sub3Initial<T1, T2, T3> extends SubState3<T1, T2, T3> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Sub3Initial<T1, T2, T3>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub3Initial<T1, T2, T3>);
   }
 
   @override
@@ -1086,8 +1054,7 @@ class _Sub3Loading<T1, T2, T3> extends SubState3<T1, T2, T3> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Sub3Loading<T1, T2, T3>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub3Loading<T1, T2, T3>);
   }
 
   @override
@@ -1112,26 +1079,15 @@ class _Sub3Success<T1, T2, T3> extends SubState3<T1, T2, T3> {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub3SuccessCopyWith<T1, T2, T3, _Sub3Success<T1, T2, T3>> get copyWith =>
-      __$Sub3SuccessCopyWithImpl<T1, T2, T3, _Sub3Success<T1, T2, T3>>(
-          this, _$identity);
+  _$Sub3SuccessCopyWith<T1, T2, T3, _Sub3Success<T1, T2, T3>> get copyWith => __$Sub3SuccessCopyWithImpl<T1, T2, T3, _Sub3Success<T1, T2, T3>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub3Success<T1, T2, T3> &&
-            const DeepCollectionEquality().equals(other.data1, data1) &&
-            const DeepCollectionEquality().equals(other.data2, data2) &&
-            const DeepCollectionEquality().equals(other.data3, data3));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub3Success<T1, T2, T3> && const DeepCollectionEquality().equals(other.data1, data1) && const DeepCollectionEquality().equals(other.data2, data2) && const DeepCollectionEquality().equals(other.data3, data3));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(data1),
-      const DeepCollectionEquality().hash(data2),
-      const DeepCollectionEquality().hash(data3));
+  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(data1), const DeepCollectionEquality().hash(data2), const DeepCollectionEquality().hash(data3));
 
   @override
   String toString() {
@@ -1140,18 +1096,14 @@ class _Sub3Success<T1, T2, T3> extends SubState3<T1, T2, T3> {
 }
 
 /// @nodoc
-abstract mixin class _$Sub3SuccessCopyWith<T1, T2, T3, $Res>
-    implements $SubState3CopyWith<T1, T2, T3, $Res> {
-  factory _$Sub3SuccessCopyWith(_Sub3Success<T1, T2, T3> value,
-          $Res Function(_Sub3Success<T1, T2, T3>) _then) =
-      __$Sub3SuccessCopyWithImpl;
+abstract mixin class _$Sub3SuccessCopyWith<T1, T2, T3, $Res> implements $SubState3CopyWith<T1, T2, T3, $Res> {
+  factory _$Sub3SuccessCopyWith(_Sub3Success<T1, T2, T3> value, $Res Function(_Sub3Success<T1, T2, T3>) _then) = __$Sub3SuccessCopyWithImpl;
   @useResult
   $Res call({T1 data1, T2 data2, T3 data3});
 }
 
 /// @nodoc
-class __$Sub3SuccessCopyWithImpl<T1, T2, T3, $Res>
-    implements _$Sub3SuccessCopyWith<T1, T2, T3, $Res> {
+class __$Sub3SuccessCopyWithImpl<T1, T2, T3, $Res> implements _$Sub3SuccessCopyWith<T1, T2, T3, $Res> {
   __$Sub3SuccessCopyWithImpl(this._self, this._then);
 
   final _Sub3Success<T1, T2, T3> _self;
@@ -1185,48 +1137,41 @@ class __$Sub3SuccessCopyWithImpl<T1, T2, T3, $Res>
 /// @nodoc
 
 class _Sub3Failure<T1, T2, T3> extends SubState3<T1, T2, T3> {
-  const _Sub3Failure(this.error) : super._();
+  const _Sub3Failure(this.error, {this.show = true}) : super._();
 
   final String error;
+  @JsonKey()
+  final bool show;
 
   /// Create a copy of SubState3
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub3FailureCopyWith<T1, T2, T3, _Sub3Failure<T1, T2, T3>> get copyWith =>
-      __$Sub3FailureCopyWithImpl<T1, T2, T3, _Sub3Failure<T1, T2, T3>>(
-          this, _$identity);
+  _$Sub3FailureCopyWith<T1, T2, T3, _Sub3Failure<T1, T2, T3>> get copyWith => __$Sub3FailureCopyWithImpl<T1, T2, T3, _Sub3Failure<T1, T2, T3>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub3Failure<T1, T2, T3> &&
-            (identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub3Failure<T1, T2, T3> && (identical(other.error, error) || other.error == error) && (identical(other.show, show) || other.show == show));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, error);
+  int get hashCode => Object.hash(runtimeType, error, show);
 
   @override
   String toString() {
-    return 'SubState3<$T1, $T2, $T3>.failure(error: $error)';
+    return 'SubState3<$T1, $T2, $T3>.failure(error: $error, show: $show)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$Sub3FailureCopyWith<T1, T2, T3, $Res>
-    implements $SubState3CopyWith<T1, T2, T3, $Res> {
-  factory _$Sub3FailureCopyWith(_Sub3Failure<T1, T2, T3> value,
-          $Res Function(_Sub3Failure<T1, T2, T3>) _then) =
-      __$Sub3FailureCopyWithImpl;
+abstract mixin class _$Sub3FailureCopyWith<T1, T2, T3, $Res> implements $SubState3CopyWith<T1, T2, T3, $Res> {
+  factory _$Sub3FailureCopyWith(_Sub3Failure<T1, T2, T3> value, $Res Function(_Sub3Failure<T1, T2, T3>) _then) = __$Sub3FailureCopyWithImpl;
   @useResult
-  $Res call({String error});
+  $Res call({String error, bool show});
 }
 
 /// @nodoc
-class __$Sub3FailureCopyWithImpl<T1, T2, T3, $Res>
-    implements _$Sub3FailureCopyWith<T1, T2, T3, $Res> {
+class __$Sub3FailureCopyWithImpl<T1, T2, T3, $Res> implements _$Sub3FailureCopyWith<T1, T2, T3, $Res> {
   __$Sub3FailureCopyWithImpl(this._self, this._then);
 
   final _Sub3Failure<T1, T2, T3> _self;
@@ -1237,12 +1182,17 @@ class __$Sub3FailureCopyWithImpl<T1, T2, T3, $Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? error = null,
+    Object? show = null,
   }) {
     return _then(_Sub3Failure<T1, T2, T3>(
       null == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      show: null == show
+          ? _self.show
+          : show // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -1251,9 +1201,7 @@ class __$Sub3FailureCopyWithImpl<T1, T2, T3, $Res>
 mixin _$SubState4<T1, T2, T3, T4> {
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is SubState4<T1, T2, T3, T4>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is SubState4<T1, T2, T3, T4>);
   }
 
   @override
@@ -1267,8 +1215,7 @@ mixin _$SubState4<T1, T2, T3, T4> {
 
 /// @nodoc
 class $SubState4CopyWith<T1, T2, T3, T4, $Res> {
-  $SubState4CopyWith(
-      SubState4<T1, T2, T3, T4> _, $Res Function(SubState4<T1, T2, T3, T4>) __);
+  $SubState4CopyWith(SubState4<T1, T2, T3, T4> _, $Res Function(SubState4<T1, T2, T3, T4>) __);
 }
 
 /// Adds pattern-matching-related methods to [SubState4].
@@ -1394,7 +1341,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(T1 data1, T2 data2, T3 data3, T4 data4)? success,
-    TResult Function(String error)? failure,
+    TResult Function(String error, bool show)? failure,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -1406,7 +1353,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
       case _Sub4Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3, _that.data4);
       case _Sub4Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return orElse();
     }
@@ -1430,7 +1377,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(T1 data1, T2 data2, T3 data3, T4 data4) success,
-    required TResult Function(String error) failure,
+    required TResult Function(String error, bool show) failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -1441,7 +1388,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
       case _Sub4Success():
         return success(_that.data1, _that.data2, _that.data3, _that.data4);
       case _Sub4Failure():
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -1464,7 +1411,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(T1 data1, T2 data2, T3 data3, T4 data4)? success,
-    TResult? Function(String error)? failure,
+    TResult? Function(String error, bool show)? failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -1475,7 +1422,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
       case _Sub4Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3, _that.data4);
       case _Sub4Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return null;
     }
@@ -1489,9 +1436,7 @@ class _Sub4Initial<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub4Initial<T1, T2, T3, T4>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub4Initial<T1, T2, T3, T4>);
   }
 
   @override
@@ -1510,9 +1455,7 @@ class _Sub4Loading<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub4Loading<T1, T2, T3, T4>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub4Loading<T1, T2, T3, T4>);
   }
 
   @override
@@ -1527,8 +1470,7 @@ class _Sub4Loading<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
 /// @nodoc
 
 class _Sub4Success<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
-  const _Sub4Success(this.data1, this.data2, this.data3, this.data4)
-      : super._();
+  const _Sub4Success(this.data1, this.data2, this.data3, this.data4) : super._();
 
   final T1 data1;
   final T2 data2;
@@ -1539,9 +1481,7 @@ class _Sub4Success<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub4SuccessCopyWith<T1, T2, T3, T4, _Sub4Success<T1, T2, T3, T4>>
-      get copyWith => __$Sub4SuccessCopyWithImpl<T1, T2, T3, T4,
-          _Sub4Success<T1, T2, T3, T4>>(this, _$identity);
+  _$Sub4SuccessCopyWith<T1, T2, T3, T4, _Sub4Success<T1, T2, T3, T4>> get copyWith => __$Sub4SuccessCopyWithImpl<T1, T2, T3, T4, _Sub4Success<T1, T2, T3, T4>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
@@ -1555,12 +1495,7 @@ class _Sub4Success<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(data1),
-      const DeepCollectionEquality().hash(data2),
-      const DeepCollectionEquality().hash(data3),
-      const DeepCollectionEquality().hash(data4));
+  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(data1), const DeepCollectionEquality().hash(data2), const DeepCollectionEquality().hash(data3), const DeepCollectionEquality().hash(data4));
 
   @override
   String toString() {
@@ -1569,18 +1504,14 @@ class _Sub4Success<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
 }
 
 /// @nodoc
-abstract mixin class _$Sub4SuccessCopyWith<T1, T2, T3, T4, $Res>
-    implements $SubState4CopyWith<T1, T2, T3, T4, $Res> {
-  factory _$Sub4SuccessCopyWith(_Sub4Success<T1, T2, T3, T4> value,
-          $Res Function(_Sub4Success<T1, T2, T3, T4>) _then) =
-      __$Sub4SuccessCopyWithImpl;
+abstract mixin class _$Sub4SuccessCopyWith<T1, T2, T3, T4, $Res> implements $SubState4CopyWith<T1, T2, T3, T4, $Res> {
+  factory _$Sub4SuccessCopyWith(_Sub4Success<T1, T2, T3, T4> value, $Res Function(_Sub4Success<T1, T2, T3, T4>) _then) = __$Sub4SuccessCopyWithImpl;
   @useResult
   $Res call({T1 data1, T2 data2, T3 data3, T4 data4});
 }
 
 /// @nodoc
-class __$Sub4SuccessCopyWithImpl<T1, T2, T3, T4, $Res>
-    implements _$Sub4SuccessCopyWith<T1, T2, T3, T4, $Res> {
+class __$Sub4SuccessCopyWithImpl<T1, T2, T3, T4, $Res> implements _$Sub4SuccessCopyWith<T1, T2, T3, T4, $Res> {
   __$Sub4SuccessCopyWithImpl(this._self, this._then);
 
   final _Sub4Success<T1, T2, T3, T4> _self;
@@ -1619,48 +1550,41 @@ class __$Sub4SuccessCopyWithImpl<T1, T2, T3, T4, $Res>
 /// @nodoc
 
 class _Sub4Failure<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
-  const _Sub4Failure(this.error) : super._();
+  const _Sub4Failure(this.error, {this.show = true}) : super._();
 
   final String error;
+  @JsonKey()
+  final bool show;
 
   /// Create a copy of SubState4
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub4FailureCopyWith<T1, T2, T3, T4, _Sub4Failure<T1, T2, T3, T4>>
-      get copyWith => __$Sub4FailureCopyWithImpl<T1, T2, T3, T4,
-          _Sub4Failure<T1, T2, T3, T4>>(this, _$identity);
+  _$Sub4FailureCopyWith<T1, T2, T3, T4, _Sub4Failure<T1, T2, T3, T4>> get copyWith => __$Sub4FailureCopyWithImpl<T1, T2, T3, T4, _Sub4Failure<T1, T2, T3, T4>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub4Failure<T1, T2, T3, T4> &&
-            (identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub4Failure<T1, T2, T3, T4> && (identical(other.error, error) || other.error == error) && (identical(other.show, show) || other.show == show));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, error);
+  int get hashCode => Object.hash(runtimeType, error, show);
 
   @override
   String toString() {
-    return 'SubState4<$T1, $T2, $T3, $T4>.failure(error: $error)';
+    return 'SubState4<$T1, $T2, $T3, $T4>.failure(error: $error, show: $show)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$Sub4FailureCopyWith<T1, T2, T3, T4, $Res>
-    implements $SubState4CopyWith<T1, T2, T3, T4, $Res> {
-  factory _$Sub4FailureCopyWith(_Sub4Failure<T1, T2, T3, T4> value,
-          $Res Function(_Sub4Failure<T1, T2, T3, T4>) _then) =
-      __$Sub4FailureCopyWithImpl;
+abstract mixin class _$Sub4FailureCopyWith<T1, T2, T3, T4, $Res> implements $SubState4CopyWith<T1, T2, T3, T4, $Res> {
+  factory _$Sub4FailureCopyWith(_Sub4Failure<T1, T2, T3, T4> value, $Res Function(_Sub4Failure<T1, T2, T3, T4>) _then) = __$Sub4FailureCopyWithImpl;
   @useResult
-  $Res call({String error});
+  $Res call({String error, bool show});
 }
 
 /// @nodoc
-class __$Sub4FailureCopyWithImpl<T1, T2, T3, T4, $Res>
-    implements _$Sub4FailureCopyWith<T1, T2, T3, T4, $Res> {
+class __$Sub4FailureCopyWithImpl<T1, T2, T3, T4, $Res> implements _$Sub4FailureCopyWith<T1, T2, T3, T4, $Res> {
   __$Sub4FailureCopyWithImpl(this._self, this._then);
 
   final _Sub4Failure<T1, T2, T3, T4> _self;
@@ -1671,12 +1595,17 @@ class __$Sub4FailureCopyWithImpl<T1, T2, T3, T4, $Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? error = null,
+    Object? show = null,
   }) {
     return _then(_Sub4Failure<T1, T2, T3, T4>(
       null == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      show: null == show
+          ? _self.show
+          : show // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -1685,9 +1614,7 @@ class __$Sub4FailureCopyWithImpl<T1, T2, T3, T4, $Res>
 mixin _$SubState5<T1, T2, T3, T4, T5> {
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is SubState5<T1, T2, T3, T4, T5>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is SubState5<T1, T2, T3, T4, T5>);
   }
 
   @override
@@ -1701,13 +1628,11 @@ mixin _$SubState5<T1, T2, T3, T4, T5> {
 
 /// @nodoc
 class $SubState5CopyWith<T1, T2, T3, T4, T5, $Res> {
-  $SubState5CopyWith(SubState5<T1, T2, T3, T4, T5> _,
-      $Res Function(SubState5<T1, T2, T3, T4, T5>) __);
+  $SubState5CopyWith(SubState5<T1, T2, T3, T4, T5> _, $Res Function(SubState5<T1, T2, T3, T4, T5>) __);
 }
 
 /// Adds pattern-matching-related methods to [SubState5].
-extension SubState5Patterns<T1, T2, T3, T4, T5>
-    on SubState5<T1, T2, T3, T4, T5> {
+extension SubState5Patterns<T1, T2, T3, T4, T5> on SubState5<T1, T2, T3, T4, T5> {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -1829,7 +1754,7 @@ extension SubState5Patterns<T1, T2, T3, T4, T5>
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5)? success,
-    TResult Function(String error)? failure,
+    TResult Function(String error, bool show)? failure,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -1839,10 +1764,9 @@ extension SubState5Patterns<T1, T2, T3, T4, T5>
       case _Sub5Loading() when loading != null:
         return loading();
       case _Sub5Success() when success != null:
-        return success(
-            _that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
+        return success(_that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
       case _Sub5Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return orElse();
     }
@@ -1865,9 +1789,8 @@ extension SubState5Patterns<T1, T2, T3, T4, T5>
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5)
-        success,
-    required TResult Function(String error) failure,
+    required TResult Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5) success,
+    required TResult Function(String error, bool show) failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -1876,10 +1799,9 @@ extension SubState5Patterns<T1, T2, T3, T4, T5>
       case _Sub5Loading():
         return loading();
       case _Sub5Success():
-        return success(
-            _that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
+        return success(_that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
       case _Sub5Failure():
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -1901,9 +1823,8 @@ extension SubState5Patterns<T1, T2, T3, T4, T5>
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5)?
-        success,
-    TResult? Function(String error)? failure,
+    TResult? Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5)? success,
+    TResult? Function(String error, bool show)? failure,
   }) {
     final _that = this;
     switch (_that) {
@@ -1912,10 +1833,9 @@ extension SubState5Patterns<T1, T2, T3, T4, T5>
       case _Sub5Loading() when loading != null:
         return loading();
       case _Sub5Success() when success != null:
-        return success(
-            _that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
+        return success(_that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
       case _Sub5Failure() when failure != null:
-        return failure(_that.error);
+        return failure(_that.error, _that.show);
       case _:
         return null;
     }
@@ -1929,9 +1849,7 @@ class _Sub5Initial<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub5Initial<T1, T2, T3, T4, T5>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub5Initial<T1, T2, T3, T4, T5>);
   }
 
   @override
@@ -1950,9 +1868,7 @@ class _Sub5Loading<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub5Loading<T1, T2, T3, T4, T5>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub5Loading<T1, T2, T3, T4, T5>);
   }
 
   @override
@@ -1967,8 +1883,7 @@ class _Sub5Loading<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
 /// @nodoc
 
 class _Sub5Success<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
-  const _Sub5Success(this.data1, this.data2, this.data3, this.data4, this.data5)
-      : super._();
+  const _Sub5Success(this.data1, this.data2, this.data3, this.data4, this.data5) : super._();
 
   final T1 data1;
   final T2 data2;
@@ -1980,9 +1895,7 @@ class _Sub5Success<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub5SuccessCopyWith<T1, T2, T3, T4, T5, _Sub5Success<T1, T2, T3, T4, T5>>
-      get copyWith => __$Sub5SuccessCopyWithImpl<T1, T2, T3, T4, T5,
-          _Sub5Success<T1, T2, T3, T4, T5>>(this, _$identity);
+  _$Sub5SuccessCopyWith<T1, T2, T3, T4, T5, _Sub5Success<T1, T2, T3, T4, T5>> get copyWith => __$Sub5SuccessCopyWithImpl<T1, T2, T3, T4, T5, _Sub5Success<T1, T2, T3, T4, T5>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
@@ -1997,13 +1910,7 @@ class _Sub5Success<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(data1),
-      const DeepCollectionEquality().hash(data2),
-      const DeepCollectionEquality().hash(data3),
-      const DeepCollectionEquality().hash(data4),
-      const DeepCollectionEquality().hash(data5));
+  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(data1), const DeepCollectionEquality().hash(data2), const DeepCollectionEquality().hash(data3), const DeepCollectionEquality().hash(data4), const DeepCollectionEquality().hash(data5));
 
   @override
   String toString() {
@@ -2012,18 +1919,14 @@ class _Sub5Success<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
 }
 
 /// @nodoc
-abstract mixin class _$Sub5SuccessCopyWith<T1, T2, T3, T4, T5, $Res>
-    implements $SubState5CopyWith<T1, T2, T3, T4, T5, $Res> {
-  factory _$Sub5SuccessCopyWith(_Sub5Success<T1, T2, T3, T4, T5> value,
-          $Res Function(_Sub5Success<T1, T2, T3, T4, T5>) _then) =
-      __$Sub5SuccessCopyWithImpl;
+abstract mixin class _$Sub5SuccessCopyWith<T1, T2, T3, T4, T5, $Res> implements $SubState5CopyWith<T1, T2, T3, T4, T5, $Res> {
+  factory _$Sub5SuccessCopyWith(_Sub5Success<T1, T2, T3, T4, T5> value, $Res Function(_Sub5Success<T1, T2, T3, T4, T5>) _then) = __$Sub5SuccessCopyWithImpl;
   @useResult
   $Res call({T1 data1, T2 data2, T3 data3, T4 data4, T5 data5});
 }
 
 /// @nodoc
-class __$Sub5SuccessCopyWithImpl<T1, T2, T3, T4, T5, $Res>
-    implements _$Sub5SuccessCopyWith<T1, T2, T3, T4, T5, $Res> {
+class __$Sub5SuccessCopyWithImpl<T1, T2, T3, T4, T5, $Res> implements _$Sub5SuccessCopyWith<T1, T2, T3, T4, T5, $Res> {
   __$Sub5SuccessCopyWithImpl(this._self, this._then);
 
   final _Sub5Success<T1, T2, T3, T4, T5> _self;
@@ -2067,48 +1970,41 @@ class __$Sub5SuccessCopyWithImpl<T1, T2, T3, T4, T5, $Res>
 /// @nodoc
 
 class _Sub5Failure<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
-  const _Sub5Failure(this.error) : super._();
+  const _Sub5Failure(this.error, {this.show = true}) : super._();
 
   final String error;
+  @JsonKey()
+  final bool show;
 
   /// Create a copy of SubState5
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$Sub5FailureCopyWith<T1, T2, T3, T4, T5, _Sub5Failure<T1, T2, T3, T4, T5>>
-      get copyWith => __$Sub5FailureCopyWithImpl<T1, T2, T3, T4, T5,
-          _Sub5Failure<T1, T2, T3, T4, T5>>(this, _$identity);
+  _$Sub5FailureCopyWith<T1, T2, T3, T4, T5, _Sub5Failure<T1, T2, T3, T4, T5>> get copyWith => __$Sub5FailureCopyWithImpl<T1, T2, T3, T4, T5, _Sub5Failure<T1, T2, T3, T4, T5>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Sub5Failure<T1, T2, T3, T4, T5> &&
-            (identical(other.error, error) || other.error == error));
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub5Failure<T1, T2, T3, T4, T5> && (identical(other.error, error) || other.error == error) && (identical(other.show, show) || other.show == show));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, error);
+  int get hashCode => Object.hash(runtimeType, error, show);
 
   @override
   String toString() {
-    return 'SubState5<$T1, $T2, $T3, $T4, $T5>.failure(error: $error)';
+    return 'SubState5<$T1, $T2, $T3, $T4, $T5>.failure(error: $error, show: $show)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$Sub5FailureCopyWith<T1, T2, T3, T4, T5, $Res>
-    implements $SubState5CopyWith<T1, T2, T3, T4, T5, $Res> {
-  factory _$Sub5FailureCopyWith(_Sub5Failure<T1, T2, T3, T4, T5> value,
-          $Res Function(_Sub5Failure<T1, T2, T3, T4, T5>) _then) =
-      __$Sub5FailureCopyWithImpl;
+abstract mixin class _$Sub5FailureCopyWith<T1, T2, T3, T4, T5, $Res> implements $SubState5CopyWith<T1, T2, T3, T4, T5, $Res> {
+  factory _$Sub5FailureCopyWith(_Sub5Failure<T1, T2, T3, T4, T5> value, $Res Function(_Sub5Failure<T1, T2, T3, T4, T5>) _then) = __$Sub5FailureCopyWithImpl;
   @useResult
-  $Res call({String error});
+  $Res call({String error, bool show});
 }
 
 /// @nodoc
-class __$Sub5FailureCopyWithImpl<T1, T2, T3, T4, T5, $Res>
-    implements _$Sub5FailureCopyWith<T1, T2, T3, T4, T5, $Res> {
+class __$Sub5FailureCopyWithImpl<T1, T2, T3, T4, T5, $Res> implements _$Sub5FailureCopyWith<T1, T2, T3, T4, T5, $Res> {
   __$Sub5FailureCopyWithImpl(this._self, this._then);
 
   final _Sub5Failure<T1, T2, T3, T4, T5> _self;
@@ -2119,12 +2015,17 @@ class __$Sub5FailureCopyWithImpl<T1, T2, T3, T4, T5, $Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? error = null,
+    Object? show = null,
   }) {
     return _then(_Sub5Failure<T1, T2, T3, T4, T5>(
       null == error
           ? _self.error
           : error // ignore: cast_nullable_to_non_nullable
               as String,
+      show: null == show
+          ? _self.show
+          : show // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
