@@ -4,7 +4,7 @@ homepage: https://github.com/mohamadalghanem474/sub_state
 repository: https://github.com/mohamadalghanem474/sub_state
 issue_tracker: https://github.com/mohamadalghanem474/sub_state/issues
 documentation: https://github.com/mohamadalghanem474/sub_state#readme
-version: 1.0.7
+version: 1.1.0
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
