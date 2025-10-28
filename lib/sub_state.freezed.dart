@@ -154,7 +154,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(int progress)? loading,
     TResult Function(TSuccess data)? success,
     TResult Function(String error, bool show)? failure,
     required TResult orElse(),
@@ -164,7 +164,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
       case _SubInitial() when initial != null:
         return initial();
       case _SubLoading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _SubSuccess() when success != null:
         return success(_that.data);
       case _SubFailure() when failure != null:
@@ -190,7 +190,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(int progress) loading,
     required TResult Function(TSuccess data) success,
     required TResult Function(String error, bool show) failure,
   }) {
@@ -199,7 +199,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
       case _SubInitial():
         return initial();
       case _SubLoading():
-        return loading();
+        return loading(_that.progress);
       case _SubSuccess():
         return success(_that.data);
       case _SubFailure():
@@ -224,7 +224,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(int progress)? loading,
     TResult? Function(TSuccess data)? success,
     TResult? Function(String error, bool show)? failure,
   }) {
@@ -233,7 +233,7 @@ extension SubStatePatterns<TSuccess> on SubState<TSuccess> {
       case _SubInitial() when initial != null:
         return initial();
       case _SubLoading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _SubSuccess() when success != null:
         return success(_that.data);
       case _SubFailure() when failure != null:
@@ -266,19 +266,57 @@ class _SubInitial<TSuccess> extends SubState<TSuccess> {
 /// @nodoc
 
 class _SubLoading<TSuccess> extends SubState<TSuccess> {
-  const _SubLoading() : super._();
+  const _SubLoading({this.progress = 0}) : super._();
+
+  @JsonKey()
+  final int progress;
+
+  /// Create a copy of SubState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$SubLoadingCopyWith<TSuccess, _SubLoading<TSuccess>> get copyWith => __$SubLoadingCopyWithImpl<TSuccess, _SubLoading<TSuccess>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType && other is _SubLoading<TSuccess>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _SubLoading<TSuccess> && (identical(other.progress, progress) || other.progress == progress));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, progress);
 
   @override
   String toString() {
-    return 'SubState<$TSuccess>.loading()';
+    return 'SubState<$TSuccess>.loading(progress: $progress)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$SubLoadingCopyWith<TSuccess, $Res> implements $SubStateCopyWith<TSuccess, $Res> {
+  factory _$SubLoadingCopyWith(_SubLoading<TSuccess> value, $Res Function(_SubLoading<TSuccess>) _then) = __$SubLoadingCopyWithImpl;
+  @useResult
+  $Res call({int progress});
+}
+
+/// @nodoc
+class __$SubLoadingCopyWithImpl<TSuccess, $Res> implements _$SubLoadingCopyWith<TSuccess, $Res> {
+  __$SubLoadingCopyWithImpl(this._self, this._then);
+
+  final _SubLoading<TSuccess> _self;
+  final $Res Function(_SubLoading<TSuccess>) _then;
+
+  /// Create a copy of SubState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? progress = null,
+  }) {
+    return _then(_SubLoading<TSuccess>(
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
@@ -543,7 +581,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(int progress)? loading,
     TResult Function(T1 data1, T2 data2)? success,
     TResult Function(String error, bool show)? failure,
     required TResult orElse(),
@@ -553,7 +591,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
       case _Sub2Initial() when initial != null:
         return initial();
       case _Sub2Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub2Success() when success != null:
         return success(_that.data1, _that.data2);
       case _Sub2Failure() when failure != null:
@@ -579,7 +617,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(int progress) loading,
     required TResult Function(T1 data1, T2 data2) success,
     required TResult Function(String error, bool show) failure,
   }) {
@@ -588,7 +626,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
       case _Sub2Initial():
         return initial();
       case _Sub2Loading():
-        return loading();
+        return loading(_that.progress);
       case _Sub2Success():
         return success(_that.data1, _that.data2);
       case _Sub2Failure():
@@ -613,7 +651,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(int progress)? loading,
     TResult? Function(T1 data1, T2 data2)? success,
     TResult? Function(String error, bool show)? failure,
   }) {
@@ -622,7 +660,7 @@ extension SubState2Patterns<T1, T2> on SubState2<T1, T2> {
       case _Sub2Initial() when initial != null:
         return initial();
       case _Sub2Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub2Success() when success != null:
         return success(_that.data1, _that.data2);
       case _Sub2Failure() when failure != null:
@@ -655,19 +693,57 @@ class _Sub2Initial<T1, T2> extends SubState2<T1, T2> {
 /// @nodoc
 
 class _Sub2Loading<T1, T2> extends SubState2<T1, T2> {
-  const _Sub2Loading() : super._();
+  const _Sub2Loading({this.progress = 0}) : super._();
+
+  @JsonKey()
+  final int progress;
+
+  /// Create a copy of SubState2
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$Sub2LoadingCopyWith<T1, T2, _Sub2Loading<T1, T2>> get copyWith => __$Sub2LoadingCopyWithImpl<T1, T2, _Sub2Loading<T1, T2>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub2Loading<T1, T2>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub2Loading<T1, T2> && (identical(other.progress, progress) || other.progress == progress));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, progress);
 
   @override
   String toString() {
-    return 'SubState2<$T1, $T2>.loading()';
+    return 'SubState2<$T1, $T2>.loading(progress: $progress)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$Sub2LoadingCopyWith<T1, T2, $Res> implements $SubState2CopyWith<T1, T2, $Res> {
+  factory _$Sub2LoadingCopyWith(_Sub2Loading<T1, T2> value, $Res Function(_Sub2Loading<T1, T2>) _then) = __$Sub2LoadingCopyWithImpl;
+  @useResult
+  $Res call({int progress});
+}
+
+/// @nodoc
+class __$Sub2LoadingCopyWithImpl<T1, T2, $Res> implements _$Sub2LoadingCopyWith<T1, T2, $Res> {
+  __$Sub2LoadingCopyWithImpl(this._self, this._then);
+
+  final _Sub2Loading<T1, T2> _self;
+  final $Res Function(_Sub2Loading<T1, T2>) _then;
+
+  /// Create a copy of SubState2
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? progress = null,
+  }) {
+    return _then(_Sub2Loading<T1, T2>(
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
@@ -938,7 +1014,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(int progress)? loading,
     TResult Function(T1 data1, T2 data2, T3 data3)? success,
     TResult Function(String error, bool show)? failure,
     required TResult orElse(),
@@ -948,7 +1024,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
       case _Sub3Initial() when initial != null:
         return initial();
       case _Sub3Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub3Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3);
       case _Sub3Failure() when failure != null:
@@ -974,7 +1050,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(int progress) loading,
     required TResult Function(T1 data1, T2 data2, T3 data3) success,
     required TResult Function(String error, bool show) failure,
   }) {
@@ -983,7 +1059,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
       case _Sub3Initial():
         return initial();
       case _Sub3Loading():
-        return loading();
+        return loading(_that.progress);
       case _Sub3Success():
         return success(_that.data1, _that.data2, _that.data3);
       case _Sub3Failure():
@@ -1008,7 +1084,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(int progress)? loading,
     TResult? Function(T1 data1, T2 data2, T3 data3)? success,
     TResult? Function(String error, bool show)? failure,
   }) {
@@ -1017,7 +1093,7 @@ extension SubState3Patterns<T1, T2, T3> on SubState3<T1, T2, T3> {
       case _Sub3Initial() when initial != null:
         return initial();
       case _Sub3Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub3Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3);
       case _Sub3Failure() when failure != null:
@@ -1050,19 +1126,57 @@ class _Sub3Initial<T1, T2, T3> extends SubState3<T1, T2, T3> {
 /// @nodoc
 
 class _Sub3Loading<T1, T2, T3> extends SubState3<T1, T2, T3> {
-  const _Sub3Loading() : super._();
+  const _Sub3Loading({this.progress = 0}) : super._();
+
+  @JsonKey()
+  final int progress;
+
+  /// Create a copy of SubState3
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$Sub3LoadingCopyWith<T1, T2, T3, _Sub3Loading<T1, T2, T3>> get copyWith => __$Sub3LoadingCopyWithImpl<T1, T2, T3, _Sub3Loading<T1, T2, T3>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub3Loading<T1, T2, T3>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub3Loading<T1, T2, T3> && (identical(other.progress, progress) || other.progress == progress));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, progress);
 
   @override
   String toString() {
-    return 'SubState3<$T1, $T2, $T3>.loading()';
+    return 'SubState3<$T1, $T2, $T3>.loading(progress: $progress)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$Sub3LoadingCopyWith<T1, T2, T3, $Res> implements $SubState3CopyWith<T1, T2, T3, $Res> {
+  factory _$Sub3LoadingCopyWith(_Sub3Loading<T1, T2, T3> value, $Res Function(_Sub3Loading<T1, T2, T3>) _then) = __$Sub3LoadingCopyWithImpl;
+  @useResult
+  $Res call({int progress});
+}
+
+/// @nodoc
+class __$Sub3LoadingCopyWithImpl<T1, T2, T3, $Res> implements _$Sub3LoadingCopyWith<T1, T2, T3, $Res> {
+  __$Sub3LoadingCopyWithImpl(this._self, this._then);
+
+  final _Sub3Loading<T1, T2, T3> _self;
+  final $Res Function(_Sub3Loading<T1, T2, T3>) _then;
+
+  /// Create a copy of SubState3
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? progress = null,
+  }) {
+    return _then(_Sub3Loading<T1, T2, T3>(
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
@@ -1339,7 +1453,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(int progress)? loading,
     TResult Function(T1 data1, T2 data2, T3 data3, T4 data4)? success,
     TResult Function(String error, bool show)? failure,
     required TResult orElse(),
@@ -1349,7 +1463,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
       case _Sub4Initial() when initial != null:
         return initial();
       case _Sub4Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub4Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3, _that.data4);
       case _Sub4Failure() when failure != null:
@@ -1375,7 +1489,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(int progress) loading,
     required TResult Function(T1 data1, T2 data2, T3 data3, T4 data4) success,
     required TResult Function(String error, bool show) failure,
   }) {
@@ -1384,7 +1498,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
       case _Sub4Initial():
         return initial();
       case _Sub4Loading():
-        return loading();
+        return loading(_that.progress);
       case _Sub4Success():
         return success(_that.data1, _that.data2, _that.data3, _that.data4);
       case _Sub4Failure():
@@ -1409,7 +1523,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(int progress)? loading,
     TResult? Function(T1 data1, T2 data2, T3 data3, T4 data4)? success,
     TResult? Function(String error, bool show)? failure,
   }) {
@@ -1418,7 +1532,7 @@ extension SubState4Patterns<T1, T2, T3, T4> on SubState4<T1, T2, T3, T4> {
       case _Sub4Initial() when initial != null:
         return initial();
       case _Sub4Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub4Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3, _that.data4);
       case _Sub4Failure() when failure != null:
@@ -1451,19 +1565,57 @@ class _Sub4Initial<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
 /// @nodoc
 
 class _Sub4Loading<T1, T2, T3, T4> extends SubState4<T1, T2, T3, T4> {
-  const _Sub4Loading() : super._();
+  const _Sub4Loading({this.progress = 0}) : super._();
+
+  @JsonKey()
+  final int progress;
+
+  /// Create a copy of SubState4
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$Sub4LoadingCopyWith<T1, T2, T3, T4, _Sub4Loading<T1, T2, T3, T4>> get copyWith => __$Sub4LoadingCopyWithImpl<T1, T2, T3, T4, _Sub4Loading<T1, T2, T3, T4>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub4Loading<T1, T2, T3, T4>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub4Loading<T1, T2, T3, T4> && (identical(other.progress, progress) || other.progress == progress));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, progress);
 
   @override
   String toString() {
-    return 'SubState4<$T1, $T2, $T3, $T4>.loading()';
+    return 'SubState4<$T1, $T2, $T3, $T4>.loading(progress: $progress)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$Sub4LoadingCopyWith<T1, T2, T3, T4, $Res> implements $SubState4CopyWith<T1, T2, T3, T4, $Res> {
+  factory _$Sub4LoadingCopyWith(_Sub4Loading<T1, T2, T3, T4> value, $Res Function(_Sub4Loading<T1, T2, T3, T4>) _then) = __$Sub4LoadingCopyWithImpl;
+  @useResult
+  $Res call({int progress});
+}
+
+/// @nodoc
+class __$Sub4LoadingCopyWithImpl<T1, T2, T3, T4, $Res> implements _$Sub4LoadingCopyWith<T1, T2, T3, T4, $Res> {
+  __$Sub4LoadingCopyWithImpl(this._self, this._then);
+
+  final _Sub4Loading<T1, T2, T3, T4> _self;
+  final $Res Function(_Sub4Loading<T1, T2, T3, T4>) _then;
+
+  /// Create a copy of SubState4
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? progress = null,
+  }) {
+    return _then(_Sub4Loading<T1, T2, T3, T4>(
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 
@@ -1752,7 +1904,7 @@ extension SubState5Patterns<T1, T2, T3, T4, T5> on SubState5<T1, T2, T3, T4, T5>
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function()? loading,
+    TResult Function(int progress)? loading,
     TResult Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5)? success,
     TResult Function(String error, bool show)? failure,
     required TResult orElse(),
@@ -1762,7 +1914,7 @@ extension SubState5Patterns<T1, T2, T3, T4, T5> on SubState5<T1, T2, T3, T4, T5>
       case _Sub5Initial() when initial != null:
         return initial();
       case _Sub5Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub5Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
       case _Sub5Failure() when failure != null:
@@ -1788,7 +1940,7 @@ extension SubState5Patterns<T1, T2, T3, T4, T5> on SubState5<T1, T2, T3, T4, T5>
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function() loading,
+    required TResult Function(int progress) loading,
     required TResult Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5) success,
     required TResult Function(String error, bool show) failure,
   }) {
@@ -1797,7 +1949,7 @@ extension SubState5Patterns<T1, T2, T3, T4, T5> on SubState5<T1, T2, T3, T4, T5>
       case _Sub5Initial():
         return initial();
       case _Sub5Loading():
-        return loading();
+        return loading(_that.progress);
       case _Sub5Success():
         return success(_that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
       case _Sub5Failure():
@@ -1822,7 +1974,7 @@ extension SubState5Patterns<T1, T2, T3, T4, T5> on SubState5<T1, T2, T3, T4, T5>
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function()? loading,
+    TResult? Function(int progress)? loading,
     TResult? Function(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5)? success,
     TResult? Function(String error, bool show)? failure,
   }) {
@@ -1831,7 +1983,7 @@ extension SubState5Patterns<T1, T2, T3, T4, T5> on SubState5<T1, T2, T3, T4, T5>
       case _Sub5Initial() when initial != null:
         return initial();
       case _Sub5Loading() when loading != null:
-        return loading();
+        return loading(_that.progress);
       case _Sub5Success() when success != null:
         return success(_that.data1, _that.data2, _that.data3, _that.data4, _that.data5);
       case _Sub5Failure() when failure != null:
@@ -1864,19 +2016,57 @@ class _Sub5Initial<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
 /// @nodoc
 
 class _Sub5Loading<T1, T2, T3, T4, T5> extends SubState5<T1, T2, T3, T4, T5> {
-  const _Sub5Loading() : super._();
+  const _Sub5Loading({this.progress = 0}) : super._();
+
+  @JsonKey()
+  final int progress;
+
+  /// Create a copy of SubState5
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$Sub5LoadingCopyWith<T1, T2, T3, T4, T5, _Sub5Loading<T1, T2, T3, T4, T5>> get copyWith => __$Sub5LoadingCopyWithImpl<T1, T2, T3, T4, T5, _Sub5Loading<T1, T2, T3, T4, T5>>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub5Loading<T1, T2, T3, T4, T5>);
+    return identical(this, other) || (other.runtimeType == runtimeType && other is _Sub5Loading<T1, T2, T3, T4, T5> && (identical(other.progress, progress) || other.progress == progress));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, progress);
 
   @override
   String toString() {
-    return 'SubState5<$T1, $T2, $T3, $T4, $T5>.loading()';
+    return 'SubState5<$T1, $T2, $T3, $T4, $T5>.loading(progress: $progress)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$Sub5LoadingCopyWith<T1, T2, T3, T4, T5, $Res> implements $SubState5CopyWith<T1, T2, T3, T4, T5, $Res> {
+  factory _$Sub5LoadingCopyWith(_Sub5Loading<T1, T2, T3, T4, T5> value, $Res Function(_Sub5Loading<T1, T2, T3, T4, T5>) _then) = __$Sub5LoadingCopyWithImpl;
+  @useResult
+  $Res call({int progress});
+}
+
+/// @nodoc
+class __$Sub5LoadingCopyWithImpl<T1, T2, T3, T4, T5, $Res> implements _$Sub5LoadingCopyWith<T1, T2, T3, T4, T5, $Res> {
+  __$Sub5LoadingCopyWithImpl(this._self, this._then);
+
+  final _Sub5Loading<T1, T2, T3, T4, T5> _self;
+  final $Res Function(_Sub5Loading<T1, T2, T3, T4, T5>) _then;
+
+  /// Create a copy of SubState5
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? progress = null,
+  }) {
+    return _then(_Sub5Loading<T1, T2, T3, T4, T5>(
+      progress: null == progress
+          ? _self.progress
+          : progress // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
   }
 }
 

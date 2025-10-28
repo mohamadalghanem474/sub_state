@@ -6,7 +6,7 @@ part 'sub_state.freezed.dart';
 @freezed
 abstract class SubState<TSuccess> with _$SubState<TSuccess> {
   const factory SubState.initial() = _SubInitial;
-  const factory SubState.loading() = _SubLoading;
+  const factory SubState.loading({@Default(0) int progress}) = _SubLoading;
   const factory SubState.success(TSuccess data) = _SubSuccess;
   const factory SubState.failure(String error, {@Default(true) bool show}) = _SubFailure;
   const SubState._();
@@ -25,7 +25,7 @@ abstract class SubState<TSuccess> with _$SubState<TSuccess> {
 @freezed
 abstract class SubState2<T1, T2> with _$SubState2<T1, T2> {
   const factory SubState2.initial() = _Sub2Initial;
-  const factory SubState2.loading() = _Sub2Loading;
+  const factory SubState2.loading({@Default(0) int progress}) = _Sub2Loading;
   const factory SubState2.success(T1 data1, T2 data2) = _Sub2Success;
   const factory SubState2.failure(String error, {@Default(true) bool show}) = _Sub2Failure;
   const SubState2._();
@@ -45,7 +45,7 @@ abstract class SubState2<T1, T2> with _$SubState2<T1, T2> {
 @freezed
 abstract class SubState3<T1, T2, T3> with _$SubState3<T1, T2, T3> {
   const factory SubState3.initial() = _Sub3Initial;
-  const factory SubState3.loading() = _Sub3Loading;
+  const factory SubState3.loading({@Default(0) int progress}) = _Sub3Loading;
   const factory SubState3.success(T1 data1, T2 data2, T3 data3) = _Sub3Success;
   const factory SubState3.failure(String error, {@Default(true) bool show}) = _Sub3Failure;
   const SubState3._();
@@ -66,7 +66,7 @@ abstract class SubState3<T1, T2, T3> with _$SubState3<T1, T2, T3> {
 @freezed
 abstract class SubState4<T1, T2, T3, T4> with _$SubState4<T1, T2, T3, T4> {
   const factory SubState4.initial() = _Sub4Initial;
-  const factory SubState4.loading() = _Sub4Loading;
+  const factory SubState4.loading({@Default(0) int progress}) = _Sub4Loading;
   const factory SubState4.success(T1 data1, T2 data2, T3 data3, T4 data4) = _Sub4Success;
   const factory SubState4.failure(String error, {@Default(true) bool show}) = _Sub4Failure;
   const SubState4._();
@@ -88,7 +88,7 @@ abstract class SubState4<T1, T2, T3, T4> with _$SubState4<T1, T2, T3, T4> {
 @freezed
 abstract class SubState5<T1, T2, T3, T4, T5> with _$SubState5<T1, T2, T3, T4, T5> {
   const factory SubState5.initial() = _Sub5Initial;
-  const factory SubState5.loading() = _Sub5Loading;
+  const factory SubState5.loading({@Default(0) int progress}) = _Sub5Loading;
   const factory SubState5.success(T1 data1, T2 data2, T3 data3, T4 data4, T5 data5) = _Sub5Success;
   const factory SubState5.failure(String error, {@Default(true) bool show}) = _Sub5Failure;
   const SubState5._();
